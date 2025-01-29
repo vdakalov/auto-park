@@ -1,7 +1,8 @@
 import Controller from '../../libs/controller';
 import { AgentModel } from './index';
-import LegalEntityModelController from '../legal-entity/controller';
+import { LegalEntityModel } from '../legal-entity';
 import Logger from '../../libs/logger';
+import LegalEntityModelController from '../legal-entity/controller';
 
 export default class AgentModelController extends Controller<AgentModel> {
 
@@ -16,22 +17,23 @@ export default class AgentModelController extends Controller<AgentModel> {
 
   public static create(
     name: string,
-    legalName: string,
-    legalInn: number = LegalEntityModelController.createInnNumber()
+    legalEntity: LegalEntityModel
   ): AgentModel {
     return {
       id: this.getNextId(),
       name,
-      legalEntity: LegalEntityModelController
-        .create(legalName, legalInn)
+      legalEntity
     };
   }
+
+  public readonly legalEntity: LegalEntityModelController;
 
   constructor(agentModel: AgentModel) {
     super(agentModel);
     if (this.id >= AgentModelController.nextId) {
       AgentModelController.nextId = this.id + 1;
     }
+    this.legalEntity = new LegalEntityModelController(this.model.legalEntity);
     this.log.debug({ nextId: AgentModelController.nextId });
   }
 
@@ -45,21 +47,5 @@ export default class AgentModelController extends Controller<AgentModel> {
 
   public set name(value: string) {
     this.model.name = value;
-  }
-
-  public get legalName(): string {
-    return this.model.legalEntity.name;
-  }
-
-  public set legalName(value: string) {
-    this.model.legalEntity.name = value;
-  }
-
-  public get legalInn(): number {
-    return this.model.legalEntity.inn;
-  }
-
-  public set legalInn(value: number) {
-    this.model.legalEntity.inn = value;
   }
 }

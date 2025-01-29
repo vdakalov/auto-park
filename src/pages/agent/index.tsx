@@ -1,6 +1,7 @@
 import Mithril from 'mithril';
 import DefaultLayout from '../../layouts/default';
 import Page from '../../libs/page';
+import AgentModelController from '../../model/agent/controller';
 import { Path } from '../../libs/router';
 
 export type Attrs = {
@@ -10,6 +11,16 @@ export type Attrs = {
 export default class AgentPage extends Page implements Mithril.ClassComponent<Attrs> {
 
   public title = 'Unknown Agent';
+
+  private onRequest(agent: AgentModelController): void {
+    this.application.checko
+      .getCompanyInfo(agent.legalEntity.inn)
+      .then(data => {
+        agent.legalEntity.name = data['НаимСокр'];
+        agent.legalEntity.inn = Number.parseInt(data['ИНН']);
+        agent.legalEntity.address = data['ЮрАдрес']['АдресРФ'];
+      });
+  }
 
   public view(vnode: Mithril.Vnode<Attrs, this>): Mithril.Children {
     const agent = this.getAgentByIdParam(vnode.attrs.id);
@@ -22,8 +33,10 @@ export default class AgentPage extends Page implements Mithril.ClassComponent<At
           id: agent.id
         }
       }, 'Изменить')}
-      <p>Название организации: {agent.legalName}</p>
-      <p>ИНН: {agent.legalInn}</p>
+      <p>Название организации: {agent.legalEntity.name}</p>
+      <p>ИНН: {agent.legalEntity.inn}</p>
+      <p>Адрес: {agent.legalEntity.address}</p>
+      <button class="btn btn-link" onclick={this.onRequest.bind(this, agent)}>Request</button>
     </DefaultLayout>
   }
 }

@@ -9,8 +9,33 @@ export default class LegalEntityModelController extends Controller<LegalEntityMo
 
   public static create(
     name: string,
-    inn: number = LegalEntityModelController.createInnNumber()
+    inn: number = LegalEntityModelController.createInnNumber(),
+    address: string = ''
   ): LegalEntityModel {
-    return { name, inn };
+    return { name, inn, address };
+  }
+
+  public get name(): string {
+    return this.model.name;
+  }
+
+  public set name(value: string) {
+    this.model.name = value;
+  }
+
+  public get inn(): number {
+    return this.model.inn;
+  }
+
+  public set inn(value: number) {
+    this.model.inn = value;
+  }
+
+  public get address(): string {
+    return this.model.address;
+  }
+
+  public set address(value: string) {
+    this.model.address = value;
   }
 }

@@ -3,7 +3,6 @@ import Page from '../../../libs/page';
 import DefaultLayout from '../../../layouts/default';
 import AgentModelController from '../../../model/agent/controller';
 import { Path } from '../../../libs/router';
-import { AgentModel } from '../../../model/agent';
 
 export type Attrs = {
   id: string;
@@ -18,6 +17,8 @@ export default class AgentEditPage extends Page implements Mithril.ClassComponen
   private legalName: string | undefined = undefined;
 
   private legalInn: number | undefined = undefined;
+
+  private legalAddress: string | undefined = undefined;
 
   private onNameChanged(agent: AgentModelController, event: InputEvent): void {
     if (event.target instanceof HTMLInputElement) {
@@ -37,10 +38,17 @@ export default class AgentEditPage extends Page implements Mithril.ClassComponen
     }
   }
 
+  private onLegalAddressChanged(agent: AgentModelController, event: InputEvent): void {
+    if (event.target instanceof HTMLInputElement) {
+      this.legalAddress = event.target.value;
+    }
+  }
+
   private reset(): void {
     this.name = undefined;
     this.legalName = undefined;
     this.legalInn = undefined;
+    this.legalAddress = undefined;
   }
 
   private goBack(id: number): void {
@@ -52,11 +60,11 @@ export default class AgentEditPage extends Page implements Mithril.ClassComponen
     if (this.name !== undefined && agent.name !== this.name) {
       agent.name = this.name;
     }
-    if (this.legalName !== undefined && agent.legalName !== this.legalName) {
-      agent.legalName = this.legalName;
+    if (this.legalName !== undefined && agent.legalEntity.name !== this.legalName) {
+      agent.legalEntity.name = this.legalName;
     }
-    if (this.legalInn !== undefined && agent.legalInn !== this.legalInn) {
-      agent.legalInn = this.legalInn;
+    if (this.legalInn !== undefined && agent.legalEntity.inn !== this.legalInn) {
+      agent.legalEntity.inn = this.legalInn;
     }
     this.application.save();
     this.goBack(agent.id);
@@ -69,11 +77,13 @@ export default class AgentEditPage extends Page implements Mithril.ClassComponen
   public view(vnode: Mithril.Vnode<Attrs, this>): Mithril.Children {
     const agent = this.getAgentByIdParam(vnode.attrs.id);
     this.name = this.name === undefined ? agent.name : this.name;
-    this.legalName = this.legalName === undefined ? agent.legalName : this.legalName;
-    this.legalInn = this.legalInn === undefined ? agent.legalInn : this.legalInn;
+    this.legalName = this.legalName === undefined ? agent.legalEntity.name : this.legalName;
+    this.legalInn = this.legalInn === undefined ? agent.legalEntity.inn : this.legalInn;
+    this.legalAddress = this.legalAddress === undefined ? agent.legalEntity.address : this.legalAddress;
     return <DefaultLayout page={this}>
+      <h3>Пользователь</h3>
       <div class="mb-3">
-        <label htmlFor="name" class="form-label">Пользовательское имя</label>
+        <label htmlFor="name" class="form-label">Имя пользователя</label>
         <input
           id="name"
           type="email"
@@ -84,18 +94,7 @@ export default class AgentEditPage extends Page implements Mithril.ClassComponen
           onchange={this.onNameChanged.bind(this, agent)}
         />
       </div>
-      <div class="mb-3">
-        <label htmlFor="legal-name" class="form-label">Юридическое наименование</label>
-        <input
-          id="legal-name"
-          type="text"
-          class="form-control"
-          autocomplete="off"
-          placeholder="ООО &quot;AAA&quot;"
-          value={this.legalName}
-          onchange={this.onLegalNameChanged.bind(this, agent)}
-        />
-      </div>
+      <h3>Ораганизация</h3>
       <div class="mb-3">
         <label htmlFor="legal-inn" class="form-label">ИНН</label>
         <input
@@ -105,6 +104,28 @@ export default class AgentEditPage extends Page implements Mithril.ClassComponen
           autocomplete="off"
           value={this.legalInn}
           onchange={this.onLegalInnChanged.bind(this, agent)}
+        />
+      </div>
+      <div class="mb-3">
+        <label htmlFor="legal-name" class="form-label">Наименование</label>
+        <input
+          id="legal-name"
+          type="text"
+          class="form-control"
+          autocomplete="off"
+          value={this.legalName}
+          onchange={this.onLegalNameChanged.bind(this, agent)}
+        />
+      </div>
+      <div class="mb-3">
+        <label htmlFor="legal-address" class="form-label">Адрес</label>
+        <input
+          id="legal-address"
+          type="text"
+          class="form-control"
+          autocomplete="off"
+          value={this.legalAddress}
+          onchange={this.onLegalAddressChanged.bind(this, agent)}
         />
       </div>
       <div class="mb-3">

@@ -15,8 +15,9 @@ export default class AgentsComponent implements Mithril.ClassComponent<Attrs> {
       <tr>
         <th>№</th>
         <th>Название</th>
-        <th>Юр. наименование</th>
+        <th>Организация</th>
         <th>ИНН</th>
+        <th>Адрес</th>
         <th></th>
       </tr>
       </thead>

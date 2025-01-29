@@ -12,8 +12,9 @@ export default class AgentComponent implements Mithril.ClassComponent<Attrs> {
     return <tr>
       <td>{vnode.attrs.agent.id}</td>
       <td>{vnode.attrs.agent.name}</td>
-      <td>{vnode.attrs.agent.legalName}</td>
-      <td>{vnode.attrs.agent.legalInn}</td>
+      <td>{vnode.attrs.agent.legalEntity.name}</td>
+      <td>{vnode.attrs.agent.legalEntity.inn}</td>
+      <td>{vnode.attrs.agent.legalEntity.address}</td>
       <td>
         {Mithril(Mithril.route.Link, {
           href: Path.Agent,
