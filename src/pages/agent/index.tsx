@@ -1,14 +1,13 @@
 import Mithril from 'mithril';
-import DefaultLayout from '../../layouts/default';
-import Page from '../../libs/page';
+import DefaultPage from '../../libs/pages/default';
 import AgentModelController from '../../model/agent/controller';
-import { Path } from '../../libs/router';
+import { LocationPath } from '../../libs/location-path';
 
 export type Attrs = {
   id: string;
 };
 
-export default class AgentPage extends Page implements Mithril.ClassComponent<Attrs> {
+export default class AgentPage extends DefaultPage<Attrs> {
 
   public title = 'Unknown Agent';
 
@@ -22,21 +21,21 @@ export default class AgentPage extends Page implements Mithril.ClassComponent<At
       });
   }
 
-  public view(vnode: Mithril.Vnode<Attrs, this>): Mithril.Children {
-    const agent = this.getAgentByIdParam(vnode.attrs.id);
+  protected render(): Mithril.Children {
+    const agent = this.ensurePageAgent();
     this.title = agent.name;
-    return <DefaultLayout page={this}>
-      {Mithril(Mithril.route.Link, {
+    return [
+      Mithril(Mithril.route.Link, {
         class: 'btn btn-primary',
-        href: Path.AgentEdit,
+        href: LocationPath.AgentEdit,
         params: {
           id: agent.id
         }
-      }, 'Изменить')}
-      <p>Название организации: {agent.legalEntity.name}</p>
-      <p>ИНН: {agent.legalEntity.inn}</p>
-      <p>Адрес: {agent.legalEntity.address}</p>
+      }, 'Изменить'),
+      <p>Название организации: {agent.legalEntity.name}</p>,
+      <p>ИНН: {agent.legalEntity.inn}</p>,
+      <p>Адрес: {agent.legalEntity.address}</p>,
       <button class="btn btn-link" onclick={this.onRequest.bind(this, agent)}>Request</button>
-    </DefaultLayout>
+    ];
   }
 }

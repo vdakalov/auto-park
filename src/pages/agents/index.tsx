@@ -1,18 +1,18 @@
 import Mithril from 'mithril';
-import DefaultLayout from '../../layouts/default';
+import DefaultPage from '../../libs/pages/default';
 import AgentsComponent from '../../components/agents';
-import Page from '../../libs/page';
-import { Path } from '../../libs/router';
+import { LocationPath } from '../../libs/location-path';
 
-export default class AgentsPage extends Page implements Mithril.ClassComponent {
+export type Attrs = {};
+
+export default class AgentsPage extends DefaultPage<Attrs> {
 
   public title = 'Агенты';
 
-  public view(vnode: Mithril.Vnode<{}, this>): Mithril.Children {
-    return <DefaultLayout page={this}>
-      {Mithril(Mithril.route.Link, { href: Path.AgentCreate, class: 'btn btn-primary' }, 'Добавить')}
-
+  protected render(): Mithril.Children {
+    return [
+      Mithril(Mithril.route.Link, { href: LocationPath.AgentCreate, class: 'btn btn-primary' }, 'Добавить'),
       <AgentsComponent agents={this.application.ctrl.agents} />
-    </DefaultLayout>;
+    ];
   }
 }

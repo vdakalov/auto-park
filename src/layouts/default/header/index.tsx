@@ -1,5 +1,5 @@
 import Mithril from 'mithril';
-import { Path } from '../../../libs/router';
+import { LocationPath } from '../../../libs/location-path';
 
 export default class HeaderDefaultLayout implements Mithril.ClassComponent {
   public view(vnode: Mithril.Vnode<{}, this>): Mithril.Children {
@@ -14,30 +14,22 @@ export default class HeaderDefaultLayout implements Mithril.ClassComponent {
             <li class="nav-item">
               {/*<a class="nav-link active" aria-current="page" href="#">Home</a>*/}
               {Mithril(Mithril.route.Link, {
-                href: Path.Index,
+                href: LocationPath.Index,
                 class: 'nav-link'
               }, 'Главная')}
             </li>
             <li class="nav-item">
               {/*<a class="nav-link" href="#">Link</a>*/}
               {Mithril(Mithril.route.Link, {
-                href: Path.Agents,
+                href: LocationPath.Agents,
                 class: 'nav-link'
               }, 'Агенты')}
             </li>
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                Dropdown
-              </a>
-              <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="#">Action</a></li>
-                <li><a class="dropdown-item" href="#">Another action</a></li>
-                <li><hr class="dropdown-divider" /></li>
-                <li><a class="dropdown-item" href="#">Something else here</a></li>
-              </ul>
-            </li>
             <li class="nav-item">
-              <a class="nav-link disabled" aria-disabled="true">Disabled</a>
+              {Mithril(Mithril.route.Link, {
+                href: LocationPath.InvoiceCreate, //
+                class: 'nav-link'
+              }, 'Выставить счёт')}
             </li>
           </ul>
           <form class="d-flex" role="search">

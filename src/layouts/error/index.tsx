@@ -21,6 +21,7 @@ export default class ErrorLayout implements Mithril.ClassComponent<Attrs> {
         <p>{vnode.attrs.message}</p>
         <pre>{vnode.attrs.stack}</pre>
         <hr/>
+        <a href={Mithril.route.prefix + '/'}>Go to index page</a>
         {vnode.children}
       </div>
     </div>;

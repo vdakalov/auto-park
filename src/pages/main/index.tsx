@@ -1,13 +1,13 @@
 import Mithril from 'mithril';
-import DefaultLayout from '../../layouts/default';
-import Page from '../../libs/page';
+import DefaultPage from '../../libs/pages/default';
 
-export default class MainPage extends Page implements Mithril.ClassComponent {
+export type Attrs = {};
+
+export default class MainPage extends DefaultPage<Attrs> {
 
   public title = 'Главная';
 
-  public view(vnode: Mithril.Vnode<{}, this>): Mithril.Children {
-    return <DefaultLayout page={this}>
-    </DefaultLayout>;
+  protected render(): Mithril.Children {
+    return <p>Main page111</p>;
   }
 }

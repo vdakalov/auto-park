@@ -1,11 +1,12 @@
 import Mithril from 'mithril';
-import DefaultLayout from '../../../layouts/default';
-import Page from '../../../libs/page';
+import DefaultPage from '../../../libs/pages/default';
 import AgentModelController from '../../../model/agent/controller';
-import { Path } from '../../../libs/router';
+import { LocationPath } from '../../../libs/location-path';
 import LegalEntityModelController from '../../../model/legal-entity/controller';
 
-export default class AgentCreatePage extends Page implements Mithril.ClassComponent {
+export type Attrs = {};
+
+export default class AgentCreatePage extends DefaultPage<Attrs> {
   public title = 'Новый агент';
 
   private name: string = '';
@@ -56,17 +57,17 @@ export default class AgentCreatePage extends Page implements Mithril.ClassCompon
       .create(this.legalName, this.legalInn, this.legalAddress);
     const agentModel = AgentModelController
       .create(this.name, legalEntity);
-    this.application.update(({ agents }) => agents.add(agentModel));
-    Mithril.route.set(Path.Agents);
+    this.application.update(({ agents }) => agents.addAgentModel(agentModel));
+    Mithril.route.set(LocationPath.Agents);
   }
 
   private onCancel(): void {
-    Mithril.route.set(Path.Agents);
+    Mithril.route.set(LocationPath.Agents);
   }
 
-  public view(vnode: Mithril.Vnode<{}, this>): Mithril.Children {
-    return <DefaultLayout page={this}>
-      <h3>Пользователь</h3>
+  protected render(): Mithril.Children {
+    return [
+      <h3>Пользователь</h3>,
       <div class="mb-3">
         <label htmlFor="name" class="form-label">Имя пользователя</label>
         <input
@@ -77,8 +78,8 @@ export default class AgentCreatePage extends Page implements Mithril.ClassCompon
           placeholder="Основной агент"
           oninput={this.onNameChanged.bind(this)}
         />
-      </div>
-      <h3>Организация</h3>
+      </div>,
+      <h3>Организация</h3>,
       <div class="mb-3">
         <label htmlFor="legal-inn" class="form-label">ИНН</label>
         <div class="input-group mb-3">
@@ -98,7 +99,7 @@ export default class AgentCreatePage extends Page implements Mithril.ClassCompon
             onclick={this.onFillLegalEntity.bind(this)}
           >Заполнить</button>
         </div>
-      </div>
+      </div>,
       <div class="mb-3">
         <label htmlFor="legal-name" class="form-label">Наименование</label>
         <input
@@ -110,7 +111,7 @@ export default class AgentCreatePage extends Page implements Mithril.ClassCompon
           value={this.legalName}
           oninput={this.onLegalNameChanged.bind(this)}
         />
-      </div>
+      </div>,
       <div class="mb-3">
         <label htmlFor="legal-address" class="form-label">Адрес</label>
         <input
@@ -122,11 +123,11 @@ export default class AgentCreatePage extends Page implements Mithril.ClassCompon
           value={this.legalAddress}
           oninput={this.onLegalAddressChanged.bind(this)}
         />
-      </div>
+      </div>,
       <div class="mb-3">
         <button class="btn btn-primary" onclick={this.onCreate.bind(this)}>Создать</button>
         <button class="btn btn-link" onclick={this.onCancel.bind(this)}>Отмена</button>
       </div>
-    </DefaultLayout>
+    ];
   }
 }

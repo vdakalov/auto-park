@@ -1,14 +1,13 @@
 import Mithril from 'mithril';
-import Page from '../../../libs/page';
-import DefaultLayout from '../../../layouts/default';
+import DefaultPage from '../../../libs/pages/default';
 import AgentModelController from '../../../model/agent/controller';
-import { Path } from '../../../libs/router';
+import { LocationPath } from '../../../libs/location-path';
 
 export type Attrs = {
   id: string;
 };
 
-export default class AgentEditPage extends Page implements Mithril.ClassComponent<Attrs> {
+export default class AgentEditPage extends DefaultPage<Attrs> {
 
   public title: string  = 'Изменение агента';
 
@@ -20,25 +19,25 @@ export default class AgentEditPage extends Page implements Mithril.ClassComponen
 
   private legalAddress: string | undefined = undefined;
 
-  private onNameChanged(agent: AgentModelController, event: InputEvent): void {
+  private onNameChanged(event: InputEvent): void {
     if (event.target instanceof HTMLInputElement) {
       this.name = event.target.value.trim();
     }
   }
 
-  private onLegalNameChanged(agent: AgentModelController, event: InputEvent): void {
+  private onLegalNameChanged(event: InputEvent): void {
     if (event.target instanceof HTMLInputElement) {
       this.legalName = event.target.value.trim();
     }
   }
 
-  private onLegalInnChanged(agent: AgentModelController, event: InputEvent): void {
+  private onLegalInnChanged(event: InputEvent): void {
     if (event.target instanceof HTMLInputElement) {
       this.legalInn = event.target.valueAsNumber;
     }
   }
 
-  private onLegalAddressChanged(agent: AgentModelController, event: InputEvent): void {
+  private onLegalAddressChanged(event: InputEvent): void {
     if (event.target instanceof HTMLInputElement) {
       this.legalAddress = event.target.value;
     }
@@ -53,7 +52,7 @@ export default class AgentEditPage extends Page implements Mithril.ClassComponen
 
   private goBack(id: number): void {
     this.reset();
-    Mithril.route.set(Path.Agent, { id });
+    Mithril.route.set(LocationPath.Agent, { id });
   }
 
   private onSave(agent: AgentModelController): void {
@@ -74,14 +73,14 @@ export default class AgentEditPage extends Page implements Mithril.ClassComponen
     this.goBack(agent.id);
   }
 
-  public view(vnode: Mithril.Vnode<Attrs, this>): Mithril.Children {
-    const agent = this.getAgentByIdParam(vnode.attrs.id);
+  protected render(): Mithril.Children {
+    const agent = this.ensurePageAgent();
     this.name = this.name === undefined ? agent.name : this.name;
     this.legalName = this.legalName === undefined ? agent.legalEntity.name : this.legalName;
     this.legalInn = this.legalInn === undefined ? agent.legalEntity.inn : this.legalInn;
     this.legalAddress = this.legalAddress === undefined ? agent.legalEntity.address : this.legalAddress;
-    return <DefaultLayout page={this}>
-      <h3>Пользователь</h3>
+    return [
+      <h3>Пользователь</h3>,
       <div class="mb-3">
         <label htmlFor="name" class="form-label">Имя пользователя</label>
         <input
@@ -91,10 +90,10 @@ export default class AgentEditPage extends Page implements Mithril.ClassComponen
           autocomplete="off"
           placeholder="Основной агент"
           value={this.name}
-          onchange={this.onNameChanged.bind(this, agent)}
+          onchange={this.onNameChanged.bind(this)}
         />
-      </div>
-      <h3>Ораганизация</h3>
+      </div>,
+      <h3>Ораганизация</h3>,
       <div class="mb-3">
         <label htmlFor="legal-inn" class="form-label">ИНН</label>
         <input
@@ -103,9 +102,9 @@ export default class AgentEditPage extends Page implements Mithril.ClassComponen
           class="form-control"
           autocomplete="off"
           value={this.legalInn}
-          onchange={this.onLegalInnChanged.bind(this, agent)}
+          onchange={this.onLegalInnChanged.bind(this)}
         />
-      </div>
+      </div>,
       <div class="mb-3">
         <label htmlFor="legal-name" class="form-label">Наименование</label>
         <input
@@ -114,9 +113,9 @@ export default class AgentEditPage extends Page implements Mithril.ClassComponen
           class="form-control"
           autocomplete="off"
           value={this.legalName}
-          onchange={this.onLegalNameChanged.bind(this, agent)}
+          onchange={this.onLegalNameChanged.bind(this)}
         />
-      </div>
+      </div>,
       <div class="mb-3">
         <label htmlFor="legal-address" class="form-label">Адрес</label>
         <input
@@ -125,13 +124,13 @@ export default class AgentEditPage extends Page implements Mithril.ClassComponen
           class="form-control"
           autocomplete="off"
           value={this.legalAddress}
-          onchange={this.onLegalAddressChanged.bind(this, agent)}
+          onchange={this.onLegalAddressChanged.bind(this)}
         />
-      </div>
+      </div>,
       <div class="mb-3">
         <button class="btn btn-primary" onclick={this.onSave.bind(this, agent)}>Сохранить</button>
         <button class="btn btn-link" onclick={this.onCancel.bind(this, agent)}>Отмена</button>
       </div>
-    </DefaultLayout>
+    ];
   }
 }

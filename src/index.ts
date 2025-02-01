@@ -4,16 +4,19 @@ import { ApplicationModel } from './model/application';
 import AgentsModelController from './model/agents/controller';
 import Logger from './libs/logger';
 import Checko from './libs/checko';
+import InvoicesModelController from './model/invoices/controller';
 
 export default class Application {
 
-  public checko: Checko = new Checko('UXmu3i0Aw29YwMYZ');
+  public readonly checko: Checko = new Checko('UXmu3i0Aw29YwMYZ');
 
-  public model: ApplicationModel;
+  public readonly model: ApplicationModel;
 
-  public ctrl: ApplicationModelController;
+  public readonly ctrl: ApplicationModelController;
 
-  public agents: AgentsModelController;
+  public readonly agents: AgentsModelController;
+
+  public readonly invoices: InvoicesModelController;
 
   private readonly log: Logger = new Logger(this);
 
@@ -26,6 +29,7 @@ export default class Application {
 
     this.ctrl = new ApplicationModelController(this.model);
     this.agents = this.ctrl.agents;
+    this.invoices = this.ctrl.invoices;
 
     // this.checko.getCompanyInfo(6621017713);
   }

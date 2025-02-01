@@ -5,14 +5,22 @@ import AgentModelController from '../agent/controller';
 
 export default class AgentsModelController extends Controller<AgentsModel> {
 
-  private ctrl: AgentModelController[] = this.model
-    .map(agent => new AgentModelController(agent));
+  private readonly ctrl: AgentModelController[] = [];
+
+  constructor(model: AgentsModel) {
+    super(model);
+
+    for (const agentModel of model) {
+      const ctrl = new AgentModelController(agentModel);
+      this.ctrl.push(ctrl);
+    }
+  }
 
   public get(id: number): AgentModelController | undefined {
     return this.ctrl.find(ctrl => ctrl.id === id);
   }
 
-  public add(agentModel: AgentModel): AgentModelController {
+  public addAgentModel(agentModel: AgentModel): AgentModelController {
     this.model.push(agentModel);
     const ctrl = new AgentModelController(agentModel);
     this.ctrl.push(ctrl);

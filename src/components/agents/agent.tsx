@@ -1,5 +1,5 @@
 import Mithril from 'mithril';
-import { Path } from '../../libs/router';
+import { LocationPath } from '../../libs/location-path';
 import AgentModelController from '../../model/agent/controller';
 
 export type Attrs = {
@@ -17,7 +17,7 @@ export default class AgentComponent implements Mithril.ClassComponent<Attrs> {
       <td>{vnode.attrs.agent.legalEntity.address}</td>
       <td>
         {Mithril(Mithril.route.Link, {
-          href: Path.Agent,
+          href: LocationPath.Agent,
           params: {
             id: vnode.attrs.agent.id,
           }
