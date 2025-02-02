@@ -1,5 +1,6 @@
 import Logger from './logger';
 
+// todo rename to ModelController
 export default class Controller<M> {
 
   public static log: Logger = new Logger(this.name);

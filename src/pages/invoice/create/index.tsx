@@ -16,10 +16,6 @@ export default class InvoicePage extends DefaultPage<Attrs> implements Mithril.C
   private invoice: InvoiceModelController = InvoiceModelController.create(0, this.application.ctrl);
 
   protected render(): Mithril.Children {
-    // const agent = this.application.agents.get(1);
-    // if (!agent) {
-    //   throw new Error('There is no agent to select while create invoice');
-    // }
     const agent = this.getPageAgent('agent');
 
     return [
@@ -30,7 +26,9 @@ export default class InvoicePage extends DefaultPage<Attrs> implements Mithril.C
           selected={agent?.id}
         />
       </FormControlComponent>,
-      <InvoiceServicesComponent invoice={this.invoice}/>
+      <h3>Услуги</h3>,
+      <InvoiceServicesComponent/>,
+      <button class="btn btn-primary">Выставить</button>
     ];
   }
 

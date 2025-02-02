@@ -1,9 +1,9 @@
 import Mithril from 'mithril';
-import InvoiceServiceModelController from '../../../../model/invoice/service/controller';
+import { InvoiceServiceModel } from '../../../../model/invoice/service';
 import InvoiceServiceItemComponent from './item';
 
 export type Attrs = {
-  services: InvoiceServiceModelController[];
+  services: InvoiceServiceModel[];
 };
 
 export default class InvoiceServicesListSectionComponent implements Mithril.ClassComponent<Attrs> {

@@ -2,8 +2,13 @@ import Controller from '../../../libs/controller';
 import { InvoiceServiceModel } from '.';
 
 export default class InvoiceServiceModelController extends Controller<InvoiceServiceModel> {
+
+  public static createModel(name: string, number: number, price: number): InvoiceServiceModel {
+    return { name, number, price };
+  }
+
   public static create(name: string, number: number, price: number): InvoiceServiceModelController {
-    return new this({ name, number, price });
+    return new this(this.createModel(name, number, price));
   }
 
   public get name(): string {
