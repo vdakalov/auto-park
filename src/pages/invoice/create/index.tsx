@@ -13,8 +13,6 @@ export type Attrs = {
 export default class InvoicePage extends DefaultPage<Attrs> implements Mithril.ClassComponent<Attrs> {
   public title: string = 'Счёт на оплату';
 
-  private invoice: InvoiceModelController = InvoiceModelController.create(0, this.application.ctrl);
-
   protected render(): Mithril.Children {
     const agent = this.getPageAgent('agent');
 
@@ -30,10 +28,5 @@ export default class InvoicePage extends DefaultPage<Attrs> implements Mithril.C
       <InvoiceServicesComponent/>,
       <button class="btn btn-primary">Выставить</button>
     ];
-  }
-
-  public oninit(vnode: Mithril.Vnode<Attrs, this>): void {
-    super.oninit(vnode);
-    this.invoice = this.getPageInvoice() || this.invoice;
   }
 }

@@ -6,6 +6,11 @@ export default abstract class DefaultPage<Attrs> extends Page<Attrs> {
   public title: string = this.constructor.name || DefaultPage.name;
 
   public view(vnode: Mithril.Vnode<Attrs, this>): Mithril.Children | null | undefined {
-    return <DefaultLayout title={this.title}>{super.view(vnode)}</DefaultLayout>;
+    const content = super.view(vnode);
+    return <DefaultLayout
+      title={this.title}
+      page={this.constructor.name}>
+      {content}
+    </DefaultLayout>;
   }
 }

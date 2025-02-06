@@ -1,7 +1,7 @@
-import Controller from '../../../libs/controller';
+import ModelController from '../../../libs/model-controller';
 import { InvoiceServiceModel } from '.';
 
-export default class InvoiceServiceModelController extends Controller<InvoiceServiceModel> {
+export default class InvoiceServiceModelController extends ModelController<InvoiceServiceModel> {
 
   public static createModel(name: string, number: number, price: number): InvoiceServiceModel {
     return { name, number, price };

@@ -1,7 +1,6 @@
-import Logger from './logger';
+import Logger from '../logger';
 
-// todo rename to ModelController
-export default class Controller<M> {
+export default class ModelController<M> {
 
   public static log: Logger = new Logger(this.name);
 
@@ -16,20 +15,13 @@ export default class Controller<M> {
 
   protected model: M;
 
-  protected get nextId() {
-    return Controller.nextId;
-  }
-
-  protected set nextId(value: number) {
-    Controller.nextId = value;
-  }
-
-  constructor(init: M) {
+  constructor(init: M, id?: number) {
     this.model = init;
-  }
-
-  protected getNextId(): number {
-    return Controller.getNextId();
+    if (id !== undefined && id >= ModelController.nextId) {
+      const new_ = id + 1;
+      this.log.debug('NextId update', { current: ModelController.nextId, id, new: new_ });
+      ModelController.nextId = new_;
+    }
   }
 
   public toJSON(): string {

@@ -5,6 +5,7 @@ import AgentsModelController from './model/agents/controller';
 import Logger from './libs/logger';
 import Checko from './libs/checko';
 import InvoicesModelController from './model/invoices/controller';
+import DocumentsModelController from './model/documents/controller';
 
 export default class Application {
 
@@ -18,6 +19,8 @@ export default class Application {
 
   public readonly invoices: InvoicesModelController;
 
+  public readonly documents: DocumentsModelController;
+
   private readonly log: Logger = new Logger(this);
 
   constructor() {
@@ -30,6 +33,7 @@ export default class Application {
     this.ctrl = new ApplicationModelController(this.model);
     this.agents = this.ctrl.agents;
     this.invoices = this.ctrl.invoices;
+    this.documents = this.ctrl.documents;
 
     // this.checko.getCompanyInfo(6621017713);
   }

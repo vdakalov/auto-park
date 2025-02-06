@@ -6,6 +6,7 @@ import AgentModelController from '../model/agent/controller';
 import InvoiceModelController from '../model/invoice/controller';
 import { LocationPath } from './location-path';
 import { PageAttrsMap } from './bootstrap';
+import DocumentModelController from '../model/document/controller';
 
 export class PageException extends Exception {
 
@@ -70,6 +71,7 @@ export default abstract class Page<Attrs = {}> implements Mithril.ClassComponent
     Mithril.route.set(location, {}, {
       state: attrs
     });
+    this.log.debug('Set Route', { location, attrs });
   }
 
   protected setPageException(exception: Exception): void {
@@ -79,7 +81,28 @@ export default abstract class Page<Attrs = {}> implements Mithril.ClassComponent
   }
 
   public oninit(vnode: Mithril.Vnode<Attrs, this>): void {
+    this.log.debug('mithril.oninit', { vnode });
     this.setVNode(vnode);
+  }
+
+  public oncreate(vnode: Mithril.VnodeDOM<Attrs, this>): void {
+    this.log.debug('mithril.oncreate', { vnode });
+  }
+
+  public onbeforeupdate(vnode: Mithril.Vnode<Attrs, this>, old: Mithril.VnodeDOM<Attrs, this>): boolean | void {
+    this.log.debug('mithril.onbeforeupdate', { vnode, old });
+  }
+
+  public onupdate(vnode: Mithril.VnodeDOM<Attrs, this>): void {
+    this.log.debug('mithril.onupdate', { vnode });
+  }
+
+  public onbeforeremove(vnode: Mithril.VnodeDOM<Attrs, this>): Promise<void> | void {
+    this.log.debug('mithril.onbeforeremove', { vnode });
+  }
+
+  public onremove(vnode: Mithril.VnodeDOM<Attrs, this>): void {
+    this.log.debug('mithril.onremove', { vnode });
   }
 
   public view(vnode: Mithril.Vnode<Attrs, this>): Mithril.Children | null | undefined {
@@ -129,6 +152,13 @@ export default abstract class Page<Attrs = {}> implements Mithril.ClassComponent
     }
   }
 
+  public getPageDocument(key?: keyof Attrs): DocumentModelController | undefined {
+    const id = this.getPageId(key);
+    if (id !== undefined) {
+      return this.application.documents.get(id);
+    }
+  }
+
   public ensurePageAgent(key?: keyof Attrs): AgentModelController {
     const agent = this.getPageAgent(key);
     if (agent === undefined) {
@@ -143,5 +173,13 @@ export default abstract class Page<Attrs = {}> implements Mithril.ClassComponent
       throw new PageException(this, 'Invoice not found');
     }
     return invoice;
+  }
+
+  public ensurePageDocument(key?: keyof Attrs): DocumentModelController {
+    const document = this.getPageDocument(key);
+    if (document === undefined) {
+      throw new PageException(this, 'Document not found');
+    }
+    return document;
   }
 }

@@ -1,11 +1,11 @@
-import Controller from '../../libs/controller';
+import ModelController from '../../libs/model-controller';
 import { InvoiceModel } from './index';
 import ApplicationModelController from '../application/controller';
 import AgentModelController from '../agent/controller';
 import { InvoiceServiceModel } from './service';
 import InvoiceServiceModelController from './service/controller';
 
-export default class InvoiceModelController extends Controller<InvoiceModel> {
+export default class InvoiceModelController extends ModelController<InvoiceModel> {
 
   public static createModel(id: number = 0, agent: number = 0, services: InvoiceServiceModel[] = []): InvoiceModel {
     return { id, agent, services };
@@ -52,7 +52,7 @@ export default class InvoiceModelController extends Controller<InvoiceModel> {
   private readonly servicesCtrl: InvoiceServiceModelController[] = [];
 
   constructor(model: InvoiceModel, applicationModelController: ApplicationModelController) {
-    super(model);
+    super(model, model.id);
     this.applicationModelController = applicationModelController;
 
     // const agent = applicationModelController.agents.get(model.agent);

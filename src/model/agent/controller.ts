@@ -1,9 +1,9 @@
-import Controller from '../../libs/controller';
+import ModelController from '../../libs/model-controller';
 import { AgentModel } from './index';
 import { LegalEntityModel } from '../legal-entity';
 import LegalEntityModelController from '../legal-entity/controller';
 
-export default class AgentModelController extends Controller<AgentModel> {
+export default class AgentModelController extends ModelController<AgentModel> {
 
   public static create(
     name: string,
@@ -19,10 +19,7 @@ export default class AgentModelController extends Controller<AgentModel> {
   public readonly legalEntity: LegalEntityModelController;
 
   constructor(agentModel: AgentModel) {
-    super(agentModel);
-    if (this.id >= AgentModelController.nextId) {
-      AgentModelController.nextId = this.id + 1;
-    }
+    super(agentModel, agentModel.id);
     this.legalEntity = new LegalEntityModelController(this.model.legalEntity);
     this.log.debug({ nextId: AgentModelController.nextId });
   }

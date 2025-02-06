@@ -1,7 +1,7 @@
 import { LegalEntityModel } from '.';
-import Controller from '../../libs/controller';
+import ModelController from '../../libs/model-controller';
 
-export default class LegalEntityModelController extends Controller<LegalEntityModel> {
+export default class LegalEntityModelController extends ModelController<LegalEntityModel> {
 
   public static createInnNumber(length: number = 10): number {
     return Math.ceil(Math.random() * (10 ** length));

@@ -8,6 +8,10 @@ import AgentCreatePage, { Attrs as AgentCreatePageAttrs } from '../pages/agent/c
 import AgentEditPage, { Attrs as AgentEditPageAttrs } from '../pages/agent/edit';
 import AgentPage, { Attrs as AgentPageAttrs } from '../pages/agent';
 import InvoicePage, { Attrs as InvoicePageAttrs } from '../pages/invoice/create';
+import DocumentsPage, { Attrs as DocumentsPageAttrs } from '../pages/documents';
+import DocumentCreatePage, { Attrs as DocumentCreatePageAttrs } from '../pages/document/create';
+import DocumentPage, { Attrs as DocumentPageAttrs } from '../pages/document';
+import DocumentEditPage, { Attrs as DocumentEditPageAttrs } from '../pages/document/edit';
 import ExceptionPage, { Attrs as ExceptionPageAttrs } from '../pages/exception';
 
 const application = new Application();
@@ -19,6 +23,10 @@ export type PageAttrsMap = {
   [LocationPath.AgentEdit]: AgentEditPageAttrs;
   [LocationPath.Agent]: AgentPageAttrs;
   [LocationPath.InvoiceCreate]: InvoicePageAttrs;
+  [LocationPath.Documents]: DocumentsPageAttrs;
+  [LocationPath.DocumentCreate]: DocumentCreatePageAttrs;
+  [LocationPath.Document]: DocumentPageAttrs;
+  [LocationPath.DocumentEdit]: DocumentEditPageAttrs;
   [LocationPath.Exception]: ExceptionPageAttrs;
 };
 
@@ -36,6 +44,12 @@ Mithril.route(window.document.body, LocationPath.Index, {
 
   // Invoice
   [LocationPath.InvoiceCreate]: new InvoicePage(application),
+
+  // Document pages
+  [LocationPath.Documents]: new DocumentsPage(application),
+  [LocationPath.DocumentCreate]: new DocumentCreatePage(application),
+  [LocationPath.Document]: new DocumentPage(application),
+  [LocationPath.DocumentEdit]: new DocumentEditPage(application),
 
   [LocationPath.Exception]: new ExceptionPage(application),
 });

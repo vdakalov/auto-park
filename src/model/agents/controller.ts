@@ -1,9 +1,9 @@
 import { AgentModel } from '../agent';
 import { AgentsModel } from './index';
-import Controller from '../../libs/controller';
+import ModelController from '../../libs/model-controller';
 import AgentModelController from '../agent/controller';
 
-export default class AgentsModelController extends Controller<AgentsModel> {
+export default class AgentsModelController extends ModelController<AgentsModel> {
 
   private readonly ctrl: AgentModelController[] = [];
 

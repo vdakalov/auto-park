@@ -19,7 +19,6 @@ export default class HeaderDefaultLayout implements Mithril.ClassComponent {
               }, 'Главная')}
             </li>
             <li class="nav-item">
-              {/*<a class="nav-link" href="#">Link</a>*/}
               {Mithril(Mithril.route.Link, {
                 href: LocationPath.Agents,
                 class: 'nav-link'
@@ -27,15 +26,17 @@ export default class HeaderDefaultLayout implements Mithril.ClassComponent {
             </li>
             <li class="nav-item">
               {Mithril(Mithril.route.Link, {
-                href: LocationPath.InvoiceCreate, //
+                href: LocationPath.InvoiceCreate,
                 class: 'nav-link'
               }, 'Выставить счёт')}
             </li>
+            <li class="nav-item">
+              {Mithril(Mithril.route.Link, {
+                href: LocationPath.Documents,
+                class: 'nav-link'
+              }, 'Документы')}
+            </li>
           </ul>
-          <form class="d-flex" role="search">
-            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
-            <button class="btn btn-outline-success" type="submit">Search</button>
-          </form>
         </div>
       </div>
     </nav>;

@@ -1,10 +1,10 @@
-import Controller from '../../libs/controller';
+import ModelController from '../../libs/model-controller';
 import { InvoicesModel } from '.';
 import { InvoiceModel } from '../invoice';
 import InvoiceModelController from '../invoice/controller';
 import ApplicationModelController from '../application/controller';
 
-export default class InvoicesModelController extends Controller<InvoicesModel> {
+export default class InvoicesModelController extends ModelController<InvoicesModel> {
 
   private readonly ctrl: InvoiceModelController[] = [];
 

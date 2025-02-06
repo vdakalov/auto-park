@@ -16,4 +16,9 @@ export enum LocationPath {
 
   // Invoice
   InvoiceCreate = '/invoice/create',
+
+  Documents = '/documents',
+  DocumentCreate = '/document/create',
+  Document = '/document/:id',
+  DocumentEdit = '/document/:id/edit'
 }
