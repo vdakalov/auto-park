@@ -2,6 +2,7 @@ import RefModelController from '../../libs/model-controller/ref';
 import { DocumentModel } from '.';
 import ApplicationModelController from '../application/controller';
 import AgentModelController from '../agent/controller';
+import AgentsModelController from '../agents/controller';
 import Exception from '../../libs/exception';
 
 export enum DocumentExceptionCode {
@@ -49,11 +50,7 @@ export default class DocumentModelController extends RefModelController<Document
     this.model.content = value;
   }
 
-  public get acceptors(): Readonly<AgentModelController[]> {
-    return this.acceptorsCtrl;
-  }
-
-  private readonly acceptorsCtrl: AgentModelController[] = [];
+  public readonly acceptors: AgentsModelController;
 
   constructor(documentModel: DocumentModel, applicationModelController: ApplicationModelController) {
     super(documentModel, applicationModelController, documentModel.id);
@@ -66,13 +63,15 @@ export default class DocumentModelController extends RefModelController<Document
     }
     this.author = agent;
 
+    this.acceptors = new AgentsModelController([], applicationModelController);
+
     for (const id of this.model.acceptors) {
       const agent = this.applicationModelController.agents.get(id);
       if (agent === undefined) {
         throw new DocumentException(`No document (id=${this.model.id}) acceptor: id=${id}`,
           DocumentExceptionCode.NoAcceptorAgent);
       }
-      this.acceptorsCtrl.push(agent);
+      this.acceptors.addUniqueItem(agent);
     }
   }
 }

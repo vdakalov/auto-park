@@ -14,7 +14,7 @@ export default class ApplicationModelController extends ModelController<Applicat
   }
 
   public readonly agents = new AgentsModelController(
-    this.model.agents || (this.model.agents = []));
+    this.model.agents || (this.model.agents = []), this);
 
   public readonly invoices = new InvoicesModelController(
     this.model.invoices || (this.model.invoices = []), this);

@@ -44,6 +44,16 @@ export default abstract class ListModelController<M, I extends ModelController<a
     return [];
   }
 
+  public removeAllItems(): number {
+    return this.items.length === 0 ? 0 : this.items.splice(0, this.items.length).length;
+  }
+
+  public adoptItems(other: ListModelController<M, I>): number {
+    this.items.length = 0;
+    this.items.push(...other.items);
+    return this.items.length;
+  }
+
   public toArray(): I[] {
     return this.items.slice(0, this.items.length);
   }

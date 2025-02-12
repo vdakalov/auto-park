@@ -68,7 +68,7 @@ export default abstract class Page<Attrs = {}> implements Mithril.ClassComponent
       id: location,
       state: attrs
     };
-    Mithril.route.set(location, {}, {
+    Mithril.route.set(location, attrs, {
       state: attrs
     });
     this.log.debug('Set Route', { location, attrs });

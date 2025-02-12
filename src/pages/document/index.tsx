@@ -19,9 +19,10 @@ export default class DocumentPage extends DefaultPage<Attrs> {
         }
       }, 'Изменить')}
       <p>{document.content}</p>
+      <i>{document.author.name}</i>
       <h4>Стороны</h4>
       <ul>
-        {document.acceptors.map(acc => <li>{acc.name}</li>)}
+        {document.acceptors.toArray().map(acc => <li>{acc.name}</li>)}
       </ul>
     </div>;
   }

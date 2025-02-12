@@ -1,30 +1,26 @@
 import Mithril from 'mithril';
-
-export type Acc = {
-  id: number;
-  name: string;
-};
+import { Agent } from '../agent-select';
 
 export type Attrs = {
-  acc: Acc;
-  onRemove?: (id: number) => void;
+  acceptor: Agent;
+  onRemove?: (agent: Agent) => void;
 };
 
 export default class AcceptorComponent implements Mithril.ClassComponent<Attrs> {
 
-  private onRemove(acc: Acc, callback: (id: number) => void): void {
-    callback(acc.id);
+  private onRemove(agent: Agent, callback: (agent: Agent) => void): void {
+    callback(agent);
   }
 
   public view(vnode: Mithril.Vnode<Attrs, this>): Mithril.Children {
-    const acc = vnode.attrs.acc;
+    const agent = vnode.attrs.acceptor;
     const cb = vnode.attrs.onRemove;
     const removeButton = cb === undefined ? undefined
       : <button class="btn btn-link"
-                onclick={this.onRemove.bind(this, acc, cb)}>Удалить</button>;
+    onclick={this.onRemove.bind(this, agent, cb)}>Убрать</button>;
     return <li>
-      {acc.name}
-      {removeButton}
+      {agent.name}
+    {removeButton}
     </li>;
   }
 }

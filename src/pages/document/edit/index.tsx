@@ -2,7 +2,9 @@ import Mithril from 'mithril';
 import DefaultPage from '../../../libs/pages/default';
 import FormControlComponent from '../../../components/form-control';
 import AgentModelController from '../../../model/agent/controller';
-import { Agent } from '../../../components/agent-select';
+import AgentsModelController from '../../../model/agents/controller';
+import DocumentAcceptorsComponent from '../../../components/document-acceptors';
+import { LocationPath } from '../../../libs/location-path';
 
 export type Attrs = {
   id: string;
@@ -13,7 +15,7 @@ export default class DocumentEditPage extends DefaultPage<Attrs> {
   private documentAuthor: number = 0;
   private documentTitle: string = '';
   private documentContent: string = '';
-  private documentAcceptors: AgentModelController[] = [];
+  private readonly documentAcceptors: AgentsModelController = new AgentsModelController([], this.application.ctrl);
 
   private onChangeDocumentTitle(event: InputEvent): void {
     if (event.target instanceof HTMLInputElement) {
@@ -27,20 +29,39 @@ export default class DocumentEditPage extends DefaultPage<Attrs> {
     }
   }
 
-  private onSelectDocumentAcceptor(agent: Agent): void {
-    this.log.info('Selected', agent);
-    const ctrl = this.application.agents.get(agent.id);
-    if (ctrl !== undefined && this.documentAcceptors.indexOf(ctrl) === -1) {
-      this.documentAcceptors.push(ctrl);
+  private onChangeDocumentAcceptors(agents: AgentModelController[]): void {
+    this.documentAcceptors.removeAllItems();
+    for (const agent of agents) {
+      this.documentAcceptors.addUniqueItem(agent);
     }
   }
 
-  private onRemoveDocumentAcceptor(id: number): void {
-    this.log.debug('onRemoveDocumentAcceptor', { id });
-    const index = this.documentAcceptors
-      .findIndex(ctrl => ctrl.id === id);
-    if (index !== -1) {
-      this.documentAcceptors.splice(index, 1);
+  private onSaveDocument(): void {
+    const document = this.ensurePageDocument();
+    if (document !== undefined) {
+      if (document.title !== this.documentTitle) {
+        document.title = this.documentTitle;
+      }
+      if (document.content !== this.documentContent) {
+        document.content = this.documentContent;
+      }
+      document.acceptors.adoptItems(this.documentAcceptors);
+      this.setLocation(LocationPath.Document, {
+        id: document.id.toString()
+      });
+    } else {
+      this.setLocation(LocationPath.Documents, {});
+    }
+  }
+
+  private onCancel(): void {
+    const document = this.ensurePageDocument();
+    if (document !== undefined) {
+      this.setLocation(LocationPath.Document, {
+        id: document.id.toString()
+      });
+    } else {
+      this.setLocation(LocationPath.Documents, {});
     }
   }
 
@@ -63,6 +84,19 @@ export default class DocumentEditPage extends DefaultPage<Attrs> {
           onchange={this.onChangeDocumentContent.bind(this)}
         >{this.documentContent}</textarea>
       </FormControlComponent>
+      <h4>Стороны</h4>
+      <p>Стороны соглашения, которые должны подписать документ</p>
+      <FormControlComponent id="document-acceptors" label="Стороны">
+        <DocumentAcceptorsComponent
+          acceptors={this.application.agents.toArray()}
+          selected={this.documentAcceptors.toArray()}
+          onUpdate={this.onChangeDocumentAcceptors.bind(this)}
+        />
+      </FormControlComponent>
+      <FormControlComponent>
+        <button class="btn btn-primary" onclick={this.onSaveDocument.bind(this)}>Сохранить</button>
+        <button class="btn btn-link" onclick={this.onCancel.bind(this)}>Отмена</button>
+      </FormControlComponent>
     </div>
   }
 
@@ -73,5 +107,6 @@ export default class DocumentEditPage extends DefaultPage<Attrs> {
     this.documentAuthor = document.author.id;
     this.documentTitle = document.title;
     this.documentContent = document.content;
+    this.documentAcceptors.adoptItems(document.acceptors);
   }
 }

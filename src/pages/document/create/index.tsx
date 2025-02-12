@@ -1,9 +1,9 @@
 import Mithril from 'mithril';
 import DefaultPage from '../../../libs/pages/default';
 import AgentModelController from '../../../model/agent/controller';
-import AgentSelectComponent, { Agent } from '../../../components/agent-select';
+import { Agent } from '../../../components/agent-select';
+import DocumentAcceptorsComponent from '../../../components/document-acceptors';
 import DocumentModelController from '../../../model/document/controller';
-import AcceptorComponent from './acceptor';
 import { LocationPath } from '../../../libs/location-path';
 import FormControlComponent from '../../../components/form-control';
 
@@ -28,6 +28,10 @@ export default class DocumentCreatePage extends DefaultPage<Attrs> {
     if (event.target instanceof HTMLTextAreaElement) {
       this.documentContent = event.target.value;
     }
+  }
+
+  private onUpdateDocumentAcceptors(selected: AgentModelController[]): void {
+    this.log.info('onUpdateDocumentAcceptors', { selected });
   }
 
   private onSelectDocumentAcceptor(agent: Agent): void {
@@ -61,9 +65,9 @@ export default class DocumentCreatePage extends DefaultPage<Attrs> {
   }
 
   protected render(vnode: Mithril.Vnode<Attrs, this>): Mithril.Children {
-    const agents = Array
-        .from(this.application.agents)
-        .filter(agent => this.documentAcceptors.indexOf(agent) === -1);
+    const acceptors = this.application.agents.toArray();
+    const selected = this.documentAcceptors;
+
     return <div>
       <FormControlComponent id="document-title" label="Название документа">
         <input
@@ -85,17 +89,10 @@ export default class DocumentCreatePage extends DefaultPage<Attrs> {
 
       <h4>Стороны</h4>
       <div class="mb-3">
-        <ul class="acceptors">
-          {this.documentAcceptors.map(agent =>
-            <AcceptorComponent acc={agent}
-               onRemove={this.onRemoveDocumentAcceptor.bind(this)} />)}
-          <li>
-            <AgentSelectComponent
-              onselect={this.onSelectDocumentAcceptor.bind(this)}
-              placeholder="Сторона документа"
-              agents={agents} />
-          </li>
-        </ul>
+        <DocumentAcceptorsComponent
+          acceptors={acceptors}
+          selected={selected}
+          onUpdate={this.onUpdateDocumentAcceptors.bind(this)}/>
       </div>
       <div class="mb-3">
         <button
